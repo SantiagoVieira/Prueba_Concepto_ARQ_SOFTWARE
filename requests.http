@@ -1,0 +1,35 @@
+### Variables
+@host = http://127.0.0.1:8000
+@token = demo-token
+
+### 1. Health check (sin token)
+GET {{host}}/salud
+
+### 2. Listar sin token -> 401
+GET {{host}}/v1/tareas
+
+### 3. Crear tarea -> 201
+POST {{host}}/v1/tareas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "titulo": "Preparar exposición" }
+
+### 4. Crear tarea inválida (título muy corto) -> 422
+POST {{host}}/v1/tareas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "titulo": "a" }
+
+### 5. Listar tareas -> 200
+GET {{host}}/v1/tareas
+Authorization: Bearer {{token}}
+
+### 6. Completar la tarea 1 -> 200
+PATCH {{host}}/v1/tareas/1/completar
+Authorization: Bearer {{token}}
+
+### 7. Completar una tarea que no existe -> 404
+PATCH {{host}}/v1/tareas/9999/completar
+Authorization: Bearer {{token}}
